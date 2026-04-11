@@ -1,0 +1,31 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <map>
+#include <optional>
+
+using namespace std;
+
+class Solution {
+public:
+    //function from leetcode goes here
+    bool isAnagram(string s, string t) {
+        return std::is_permutation(s.begin(), s.end(), t.begin());
+    }
+};
+
+
+// === Debug part ==============================================
+// use clang++ -std=c++20 template.cpp -o template to compile
+
+int main(){
+    //example input
+    std::vector<int> nums{1,1,2};
+
+    Solution sol{};
+
+    //output
+    std::cout << sol.isAnagram("listen", "sileent") << std::endl;
+
+}
