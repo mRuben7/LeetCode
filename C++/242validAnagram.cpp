@@ -11,7 +11,9 @@ class Solution {
 public:
     //function from leetcode goes here
     bool isAnagram(string s, string t) {
-        return std::is_permutation(s.begin(), s.end(), t.begin());
+        // return std::is_permutation(s.begin(), s.end(), t.begin());
+        if (s.size() != t.size()) return false;
+        
     }
 };
 
@@ -26,6 +28,6 @@ int main(){
     Solution sol{};
 
     //output
-    std::cout << sol.isAnagram("listen", "sileent") << std::endl;
+    std::cout << sol.isAnagram("anagram", "nagaram") << std::endl;
 
 }
