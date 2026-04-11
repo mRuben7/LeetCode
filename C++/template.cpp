@@ -5,9 +5,12 @@
 #include <map>
 #include <optional>
 
+using namespace std;
+
 class Solution {
 public:
     //function from leetcode goes here
+
 };
 
 
@@ -21,5 +24,5 @@ int main(){
     Solution sol{};
 
     //output
-    std::cout << sol.removeDuplicates(nums) << std::endl;
+    
 }
