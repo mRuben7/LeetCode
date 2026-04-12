@@ -13,7 +13,15 @@ public:
     bool isAnagram(string s, string t) {
         // return std::is_permutation(s.begin(), s.end(), t.begin());
         if (s.size() != t.size()) return false;
-        
+        for (int i = 0; i < s.size(); ++i) {
+            size_t pos = t.find(s[i]);
+            if(pos == std::string::npos){
+                return false;
+            } 
+            t.erase(pos, 1);
+        }
+        if (!t.empty()) return false;
+        return true;
     }
 };
 
