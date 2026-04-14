@@ -11,7 +11,10 @@ class Solution {
 public:
     //function from leetcode goes here
     vector<int> twoSum(vector<int>& nums, int target) {
-        std::map<int, int> seenNums;
+        std::unordered_map<int, int> seenNums;
+        if(nums.size() == 2){
+            return {0, 1};
+        }
         for(int i=0;i<nums.size();i++){
             int res = target - nums[i];
             auto it = seenNums.find(res);
