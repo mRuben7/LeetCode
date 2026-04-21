@@ -16,21 +16,21 @@ public:
     //function from leetcode goes here
     vector<int> topKFrequent(vector<int>& nums, int k) {
         if (nums.size()<2) return {nums[0]};
-        std::unordered_map<int, int> freqs{};
+        std::unordered_map<int, int> freqs{}; // num, appeareance freq
         for (int n:nums){
             freqs[n]++;
         }
-        std::map<int, int> orderedFreqs{};
+        std::vector<pair<int, int>> vecFreqs{};
         for (auto freq:freqs){
-            orderedFreqs[freq.second] = freq.first;
+            vecFreqs.emplace_back(freq.first, freq.second);
         }
-        vector<int> res{};
-        auto it = orderedFreqs.end();
-        it--;
-        while (res.size() < k){
-            res.emplace_back(it->second);
-            if (it == orderedFreqs.begin()) break;
-            it--;
+        std::sort(vecFreqs.begin(), vecFreqs.end(),
+                    [](const std::pair<int,int>& a, const std::pair<int,int>& b) {
+                        return a.second > b.second;
+            });
+        std::vector<int> res{};
+        for(int i=0;i<k;i++){
+            res.emplace_back(vecFreqs[i].first);
         }
         return res;
     }
