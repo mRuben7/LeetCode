@@ -20,17 +20,22 @@ public:
         for (int n:nums){
             freqs[n]++;
         }
-        std::vector<pair<int, int>> vecFreqs{};
+        std::vector<pair<int, int>> vecFreqs{}; // num, appeareance freq
         for (auto freq:freqs){
             vecFreqs.emplace_back(freq.first, freq.second);
         }
-        std::sort(vecFreqs.begin(), vecFreqs.end(),
-                    [](const std::pair<int,int>& a, const std::pair<int,int>& b) {
-                        return a.second > b.second;
-            });
+
+        std::vector<std::vector<int>> freqListNums(nums.size()+1); // freq and list of nums that appear that many times
+        for (auto val : vecFreqs){
+            freqListNums[val.second].emplace_back(val.first);
+        }
         std::vector<int> res{};
-        for(int i=0;i<k;i++){
-            res.emplace_back(vecFreqs[i].first);
+        for(int i=freqListNums.size()-1;i>=0&&res.size()<k;i--){
+            if(freqListNums[i].empty()) continue;
+            for(auto a : freqListNums[i]){
+                if (res.size() == k) break;
+                res.emplace_back(a);
+            }
         }
         return res;
     }
