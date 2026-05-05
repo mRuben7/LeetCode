@@ -15,11 +15,36 @@ class Solution {
 public:
     //function from leetcode goes here
     string encode(vector<string>& strs) {
+        if (strs.empty()) return {};
 
+        std::string res{};
+        for (const auto& str:strs){
+            std::string tmpStr{};
+            for (char c:str){
+                tmpStr.push_back(c-CODING_MOVEMENT);
+            }
+            res.append(tmpStr);
+            res.push_back(ETX);
+            tmpStr.clear();
+        }
+        return res;
     }
 
     vector<string> decode(string s) {
+        if (s.empty()) return {};
 
+        std::vector<std::string> res{};
+        std::string tempStr{};
+
+        for (char c:s){
+            if (c==ETX){
+                res.emplace_back(tempStr);
+                tempStr.clear();
+                continue;
+            }
+            tempStr.push_back(c+CODING_MOVEMENT);
+        }
+        return res;
     }
 
 private:
