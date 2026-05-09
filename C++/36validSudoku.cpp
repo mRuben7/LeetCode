@@ -15,10 +15,55 @@ class Solution {
 public:
     //function from leetcode goes here
     bool isValidSudoku(vector<vector<char>>& board) {
-        if (board.empty()) return false;
+        if (board.empty() || board.size() < 9) return false;
 
+        // check rows
+        unordered_set<char> numsSeen{};
         for (const auto& row:board){
-            if (row.empty()) return false;
+            if (row.empty() || row.size() < 9) return false;
+            numsSeen.clear();
+            for (char col:row){
+                if (col=='.') continue;
+                auto it = numsSeen.find(col);
+                if(it != numsSeen.end())
+                    return false;
+                numsSeen.insert(col);
+            }
+        }
+        numsSeen.clear();
+        // check cols
+        for (int cI = 0; cI<9;cI++){
+            numsSeen.clear();
+            for (int rI = 0; rI<9;rI++){
+                if (board[rI][cI]=='.') continue;
+                auto it = numsSeen.find(board[rI][cI]);
+                if(it != numsSeen.end())
+                    return false;
+                numsSeen.insert(board[rI][cI]);
+            }
+        }
+        
+        numsSeen.clear();
+        // check quadrants
+        int rI = 0; //6 max
+        int cI = 0; //6 max
+        while (rI < 6 && cI < 6){
+            numsSeen.clear();
+            for (int r = 0; r<3;r++){
+                for (int c = 0; c<3;c++){
+                    if (board[rI+r][cI+c]=='.') continue;
+                    auto it = numsSeen.find(board[rI+r][cI+c]);
+                    if(it != numsSeen.end())
+                        return false;
+                    numsSeen.insert(board[rI+r][cI+c]);
+                }
+            }
+            if (cI>=6){
+                rI += 3;
+                cI = 0;
+            } else {
+                cI += 3;
+            }
         }
 
         return true;
