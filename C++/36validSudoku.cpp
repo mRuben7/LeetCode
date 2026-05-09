@@ -47,7 +47,7 @@ public:
         // check quadrants
         int rI = 0; //6 max
         int cI = 0; //6 max
-        while (rI < 6 && cI < 6){
+        while (rI <= 6 && cI <= 6){
             numsSeen.clear();
             for (int r = 0; r<3;r++){
                 for (int c = 0; c<3;c++){
