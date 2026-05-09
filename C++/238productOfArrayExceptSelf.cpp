@@ -17,26 +17,17 @@ public:
     vector<int> productExceptSelf(vector<int>& nums) {
         if (nums.empty()) return {};
 
-        int64_t totalProd = 1;
-        bool isThereAZero = false;
-
-        for (int num:nums){
-            if (num==0){
-                isThereAZero = true;
-                continue;
-            }
-            totalProd *= num;
-        }
-        
-        std::cout << "total " << totalProd << std::endl;
         std::vector<int32_t> resVec(nums.size());
 
+        int prefix = 1;
         for (int i=0;i<nums.size();i++){
-            if (isThereAZero){
-                resVec[i] = nums[i]==0 ? totalProd : 0;
-            }else{
-                resVec[i] = totalProd/nums[i];
-            }
+            resVec[i] = prefix;
+            prefix *= nums[i];
+        }
+        prefix = 1;
+        for (int i=nums.size()-1;i>=0;i--){
+            resVec[i] *= prefix;
+            prefix *= nums[i];
         }
 
         return resVec;
