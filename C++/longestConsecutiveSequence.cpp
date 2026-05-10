@@ -16,7 +16,31 @@ public:
     //function from leetcode goes here
     int longestConsecutive(vector<int>& nums) {
         if (nums.empty()) return {};
-        return 0;
+        std::sort(nums.begin(), nums.end());
+        int maxCount=0;
+        int count=1;
+        int prevElem=0;
+        bool isFirstElem = true;
+        for (int n:nums){
+            if (isFirstElem){
+                isFirstElem = false;
+                prevElem = n;
+                continue;
+            }
+            if (prevElem == n){
+                prevElem = n;
+                continue;
+            }
+            if (n==(prevElem+1)){
+                count++;
+            } else {
+                if (count > maxCount)
+                    maxCount = count;
+                count = 1;
+            }
+            prevElem = n;
+        }
+        return maxCount?maxCount:count;
     }
 };
 
