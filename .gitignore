@@ -55,4 +55,4 @@ main
 
 Info.plist
 *.yml
-*
+*.dSYM
