@@ -19,21 +19,15 @@ public:
             return {};
         
         std::vector<int> res(temperatures.size());
-        // res.reserve(temperatures.size());
         std::vector<std::pair<int, int>> stack{}; // temp, index
         stack.reserve(temperatures.size());
         
         for (int i=0;i<temperatures.size();i++){
-            for (const auto& st:stack){
-                if (temperatures[i]>st.first){
-                    res[st.second] = i-st.second;
-                    stack.erase(stack.begin());
-                }
+            while (!stack.empty() && temperatures.at(i)>stack.back().first){
+                res[stack.back().second] = i-stack.back().second;
+                stack.pop_back();
             }
             stack.push_back({temperatures[i], i});
-        }
-        for (const auto& st:stack){
-            res[st.second] = 0;
         }
         return res;
     }
@@ -56,27 +50,27 @@ int main(){
     //output
     std::cout << "arr for nums\n";
     for (const auto& num:sol.dailyTemperatures(nums)){
-        std::cout << num << std::endl;
+        std::cout << num << ", ";
     }
-    std::cout << "-------------------------------------------\n";
+    std::cout << "\n-------------------------------------------\n";
     std::cout << "arr for nums2\n";
     for (const auto& num:sol.dailyTemperatures(nums2)){
-        std::cout << num << std::endl;
+        std::cout << num << ", ";
     }
-    std::cout << "-------------------------------------------\n";
+    std::cout << "\n-------------------------------------------\n";
     std::cout << "arr for nums3\n";
     for (const auto& num:sol.dailyTemperatures(nums3)){
-        std::cout << num << std::endl;
+        std::cout << num << ", ";
     }
-    std::cout << "-------------------------------------------\n";
+    std::cout << "\n-------------------------------------------\n";
     std::cout << "arr for nums4\n";
     for (const auto& num:sol.dailyTemperatures(nums4)){
-        std::cout << num << std::endl;
+        std::cout << num << ", ";
     }
-    std::cout << "-------------------------------------------\n";
+    std::cout << "\n-------------------------------------------\n";
     std::cout << "arr for nums5\n";
     for (const auto& num:sol.dailyTemperatures(nums5)){
-        std::cout << num << std::endl;
+        std::cout << num << ", ";
     }
-    std::cout << "-------------------------------------------\n";
+    std::cout << "\n-------------------------------------------\n";
 }
