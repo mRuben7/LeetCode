@@ -18,21 +18,22 @@ public:
         if (temperatures.empty())
             return {};
         
-        std::vector<int> res{};
-        res.reserve(temperatures.size());
-        int count = 0;
-
-        for (int i=0; i<temperatures.size();i++){
-            int resElem = 0;
-            count = 1;
-            for (int j=i+1; j<temperatures.size();j++){
-                if (temperatures[j]>temperatures[i]){
-                    resElem = count;
-                    break;
+        std::vector<int> res(temperatures.size());
+        // res.reserve(temperatures.size());
+        std::vector<std::pair<int, int>> stack{}; // temp, index
+        stack.reserve(temperatures.size());
+        
+        for (int i=0;i<temperatures.size();i++){
+            for (const auto& st:stack){
+                if (temperatures[i]>st.first){
+                    res[st.second] = i-st.second;
+                    stack.erase(stack.begin());
                 }
-                count++;
             }
-            res.push_back(resElem);
+            stack.push_back({temperatures[i], i});
+        }
+        for (const auto& st:stack){
+            res[st.second] = 0;
         }
         return res;
     }
