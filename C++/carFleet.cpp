@@ -35,10 +35,37 @@ public:
 int main(){
     //example input
     int target = 10;
-    std::vector<int> positions{30,38,30,36,35,40,28};
-    std::vector<int> speeds{30,38,30,36,35,40,28};
+    std::vector<int> positions{1,4};
+    std::vector<int> speeds{3,2};
 
     Solution sol{};
+
+    int target2 = 10;
+    std::vector<int> positions2{4,1,0,7};
+    std::vector<int> speeds2{2,2,1,1};
+
+    int target3 = 12;
+    std::vector<int> positions3{10,8,0,5,3};
+    std::vector<int> speeds3{2,4,1,1,3};
+
+    int target4 = 10;
+    std::vector<int> positions4{3};
+    std::vector<int> speeds4{3};
+
+    int target5 = 100;
+    std::vector<int> positions5{0,2,4};
+    std::vector<int> speeds5{4,2,1};
+
+    std::cout << "first example " << sol.carFleet(target, positions, speeds) << std::endl;
+    std::cout << "-------------------------------------------\n"; // expected 1
+    std::cout << "second example " << sol.carFleet(target2, positions2, speeds2) << std::endl;
+    std::cout << "-------------------------------------------\n"; // expected 3
+    std::cout << "third example " << sol.carFleet(target3, positions3, speeds3) << std::endl;
+    std::cout << "-------------------------------------------\n"; // expected 3
+    std::cout << "fourth example " << sol.carFleet(target4, positions4, speeds4) << std::endl;
+    std::cout << "-------------------------------------------\n"; // expected 1
+    std::cout << "fifth example " << sol.carFleet(target5, positions5, speeds5) << std::endl;
+    std::cout << "-------------------------------------------\n"; // expected 1
 
     //output
 
