@@ -18,13 +18,57 @@ public:
         if (target<1 || position.empty() || position.size()<1)
             return 0;
 
-        std::unordered_set<int> res;
-        for (int i=0; i<position.size(); i++){
-            int numOfMoves = target - position[i];
-            int totalMoves = numOfMoves/speed[i];
-            res.insert(totalMoves);
+        std::vector<pair<int, int>> cars{}; //position, speed
+        cars.reserve(position.size());
+
+        for (int i=0;i<position.size();i++){
+            cars.emplace_back(position[i], speed[i]);
         }
-        return res.size();
+        sort(cars.begin(), cars.end());
+        std::vector<std::vector<pair<int, int>>> fleets{};
+        fleets.reserve(cars.size());
+        for (const auto& car:cars){
+            fleets.push_back({car});
+        }
+        std::vector<std::vector<pair<int, int>>> finalStack{};
+        while (!fleets.empty()){
+            std::vector<pair<int, int>> prevFleet{};
+            bool isFirstElem = true;
+            for (int i=0; i<fleets.size();i++){
+                if (prevFleet.empty()){
+                    prevFleet = fleets[i];
+                    if (fleets.size()>1){
+                        isFirstElem = false;
+                        continue;
+                    }
+                }
+                int nextPosOfPrevFleet = prevFleet.back().first + prevFleet.back().second;
+                int nextPostOfCurrentFleet = fleets[i][0].first + fleets[i][0].second;
+                int nextPostOfLastCurrentFleet = fleets[i].back().first + fleets[i].back().second;
+                if (nextPosOfPrevFleet>=nextPostOfCurrentFleet){
+                    // pop fleet from prev and add to current, also hold the pos to prev one
+                    int fleetSpeed = fleets[i][0].second;
+                    int pos = fleets[i][0].first;
+                    for (int j=0; j<prevFleet.size();j++){
+                        // fleets[i].emplace_back(pos - j, fleetSpeed); //? should this be added on top instead?
+                        fleets[i].insert(fleets[i].begin(), {pos - j, fleetSpeed});
+                    }
+                    fleets.erase(fleets.begin()+i);
+                }else if (nextPostOfLastCurrentFleet>=target){ // target reached
+                    // add fleet to final stack and pop it from fleets
+                    finalStack.push_back(fleets[i]);
+                    // fleets.pop_back(); // IDK if pop_back is correct or should be fleets[i]
+                    fleets.erase(fleets.begin()+i);
+                }else{
+                    for (auto& car:fleets[i]){
+                        car.first += car.second;
+                    }
+                }
+                prevFleet.clear();
+                prevFleet = fleets[i];
+            }
+        }
+        return finalStack.size();
     }
 };
 
