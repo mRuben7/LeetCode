@@ -11,64 +11,38 @@
 
 using namespace std;
 
+struct car{
+    int pos;
+    double movesLeft;
+};
+
 class Solution {
 public:
     //function from leetcode goes here
     int carFleet(int target, vector<int>& position, vector<int>& speed) {
         if (target<1 || position.empty() || position.size()<1)
             return 0;
-
-        std::vector<pair<int, int>> cars{}; //position, speed
-        cars.reserve(position.size());
-
-        for (int i=0;i<position.size();i++){
-            cars.emplace_back(position[i], speed[i]);
+        
+        std::vector<car> cars(position.size());
+        for (int i=0; i<position.size();i++){
+            cars[i].pos = position[i];
+            int positionsLeft = target - position[i];
+            cars[i].movesLeft = static_cast<double>(positionsLeft) / speed[i];
         }
-        sort(cars.begin(), cars.end());
-        std::vector<std::vector<pair<int, int>>> fleets{};
-        fleets.reserve(cars.size());
-        for (const auto& car:cars){
-            fleets.push_back({car});
-        }
-        std::vector<std::vector<pair<int, int>>> finalStack{};
-        while (!fleets.empty()){
-            std::vector<pair<int, int>> prevFleet{};
-            bool isFirstElem = true;
-            for (int i=0; i<fleets.size();i++){
-                if (prevFleet.empty()){
-                    prevFleet = fleets[i];
-                    if (fleets.size()>1){
-                        isFirstElem = false;
-                        continue;
-                    }
-                }
-                int nextPosOfPrevFleet = prevFleet.back().first + prevFleet.back().second;
-                int nextPostOfCurrentFleet = fleets[i][0].first + fleets[i][0].second;
-                int nextPostOfLastCurrentFleet = fleets[i].back().first + fleets[i].back().second;
-                if (nextPosOfPrevFleet>=nextPostOfCurrentFleet){
-                    // pop fleet from prev and add to current, also hold the pos to prev one
-                    int fleetSpeed = fleets[i][0].second;
-                    int pos = fleets[i][0].first;
-                    for (int j=0; j<prevFleet.size();j++){
-                        // fleets[i].emplace_back(pos - j, fleetSpeed); //? should this be added on top instead?
-                        fleets[i].insert(fleets[i].begin(), {pos - j, fleetSpeed});
-                    }
-                    fleets.erase(fleets.begin()+i);
-                }else if (nextPostOfLastCurrentFleet>=target){ // target reached
-                    // add fleet to final stack and pop it from fleets
-                    finalStack.push_back(fleets[i]);
-                    // fleets.pop_back(); // IDK if pop_back is correct or should be fleets[i]
-                    fleets.erase(fleets.begin()+i);
-                }else{
-                    for (auto& car:fleets[i]){
-                        car.first += car.second;
-                    }
-                }
-                prevFleet.clear();
-                prevFleet = fleets[i];
+        std::sort(cars.begin(), cars.end(), [](const car& a, const car& b){
+            return a.pos > b.pos;
+        });
+        
+        int fleets = 0;
+        double slowerFleet = 0;
+        for (const car& c:cars){
+            // cause if it's less or equal moves it'll catch it, if not it becomes a new fleet
+            if (c.movesLeft>slowerFleet){
+                slowerFleet = c.movesLeft;
+                fleets++;
             }
         }
-        return finalStack.size();
+        return fleets;
     }
 };
 
