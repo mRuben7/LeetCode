@@ -42,7 +42,7 @@ public:
             }
 
             int lastIndex = i;
-            while (heights[i]<stack.back().val){
+            while (!stack.empty() && heights[i]<stack.back().val){
                 // compute area 
                 int width = i - stack.back().leftExtendableIndex;
                 lastIndex = stack.back().leftExtendableIndex;
@@ -56,6 +56,11 @@ public:
         }
 
         // compute what's left on the stack
+        for (const auto& b:stack){
+            int width = heights.size() - b.leftExtendableIndex;
+            int area = b.val * width;
+            maxArea = area>maxArea?area:maxArea;
+        }
 
         return maxArea;
     }
