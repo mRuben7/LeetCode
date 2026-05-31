@@ -13,7 +13,7 @@ using namespace std;
 
 struct bar{
     int val;
-    int width;
+    int leftExtendableIndex;
 };
 
 class Solution {
@@ -22,47 +22,42 @@ public:
         if (heights.empty())
             return 0;
 
-        std::vector<bar> bars{};
+        int maxArea = 0;
+        std::vector<bar> stack{};
+        stack.reserve(heights.size());
+
         for (int i=0;i<heights.size();i++){
-            bar b{heights[i], 0};
-            int width = 0;
-            int l = i-1;
-            int r = i+1;
-            bool canExpandLeft = true;
-            bool canExpandRight = true;
-            while (canExpandLeft || canExpandRight){
-                if (l<0)
-                    canExpandLeft = false;
-                if (r>=heights.size())
-                    canExpandRight = false;
-                
-                if (canExpandLeft){
-                    if (heights[i]<= heights[l]){
-                        width++;
-                    } else {
-                        canExpandLeft = false;
-                    }
-                }
-                if (canExpandRight){
-                    if (heights[i]<= heights[r]){
-                        width++;
-                    } else {
-                        canExpandRight = false;
-                    }
-                }
-                l--;
-                r++;
+            bar b{};
+            b.val = heights[i];
+
+            if (i==0){
+                b.leftExtendableIndex = i;
+                stack.push_back(b);
+                continue;
             }
-            b.width = ++width; // to add itself
-            bars.push_back(b);
+            if (heights[i]>=stack.back().val){
+                b.leftExtendableIndex = i;
+                stack.push_back(b);
+                continue;
+            }
+
+            int lastIndex = i;
+            while (heights[i]<stack.back().val){
+                // compute area 
+                int width = i - stack.back().leftExtendableIndex;
+                lastIndex = stack.back().leftExtendableIndex;
+                int area = stack.back().val * width;
+                maxArea = area>maxArea?area:maxArea;
+                // pop
+                stack.pop_back();
+            } 
+            b.leftExtendableIndex = lastIndex;
+            stack.push_back(b);
         }
-        int max = 0;
-        for (const auto& bar:bars){
-            int area = bar.val * bar.width;
-            if (area>max)
-                max = area;
-        }
-        return max;
+
+        // compute what's left on the stack
+
+        return maxArea;
     }
 };
 
