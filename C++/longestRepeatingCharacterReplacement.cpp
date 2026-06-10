@@ -17,7 +17,6 @@ struct maxSubstr
     char character;
 };
 
-
 class Solution {
 public:
     int characterReplacement(string s, int k) {
@@ -40,10 +39,26 @@ public:
             maxSrt.length = count;
             maxSrt.character = currentChar;
         }
-        return 0;
+
+        int res = 0;
+        int l = 0;
+        std::unordered_multiset<char> diffs{};
+        diffs.reserve(s.size());
+
+        int r = 0;
+        for (;r<s.size();r++){
+            while (diffs.size()>k){
+                res = std::max(res, r-1-l);
+                diffs.erase(s[l]);
+                l++;
+            }
+            if (s[r] != maxSrt.character){
+                diffs.insert(s[r]);
+            }
+        }
+        res = std::max(res, r-l-(s[r]!=maxSrt.character));
+        return res;
     }
-private:
-    std::unordered_map<char, int> substrs{}; // cahr val, lenght
 };
 
 
@@ -54,9 +69,9 @@ private:
 int main(){
     Solution sol{};
 
-    std::string vals = "AAABABB";
+    std::string vals = "AAAB";
 
-    std::cout << "first example " << sol.characterReplacement(vals, 1) << std::endl;
+    std::cout << "first example " << sol.characterReplacement(vals, 0) << std::endl;
     std::cout << "-------------------------------------------\n"; // expected 5
 
 }
