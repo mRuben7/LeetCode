@@ -16,8 +16,21 @@ public:
     int lengthOfLongestSubstring(string s) {
         if (s.empty())
             return 0;
-        return 0;
+
+        int max = 0;
+        int l = 0;
+        for (int r=0;r<s.size();r++){
+            while(seenChars.count(s[r])){
+                seenChars.erase(s[l]);
+                l++;
+            }
+            max = std::max(max, (r-l)+1);
+            seenChars.insert(s[r]);
+        }
+        return max;
     }
+private:
+    std::unordered_set<char> seenChars{};
 };
 
 
