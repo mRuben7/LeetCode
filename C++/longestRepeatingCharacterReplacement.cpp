@@ -20,44 +20,25 @@ struct maxSubstr
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-        char currentChar = s[0];
-        int count = 0;
-        maxSubstr maxSrt{};
-        for (const char c:s){
-            if (c == currentChar){
-                count++;
-            } else {
-                if (count>maxSrt.length){
-                    maxSrt.length = count;
-                    maxSrt.character = currentChar;
-                }
-                currentChar = c;
-                count = 1;
+        std::unordered_map<char, int> freq;
+
+        int left = 0;
+        int maxFreq = 0;
+        int maxLen = 0;
+
+        for (int right = 0; right < s.size(); right++) {
+            freq[s[right]]++;
+            maxFreq = std::max(maxFreq, freq[s[right]]);
+
+            while ((right - left + 1) - maxFreq > k) {
+                freq[s[left]]--;
+                left++;
             }
-        }
-        if (count>maxSrt.length){
-            maxSrt.length = count;
-            maxSrt.character = currentChar;
+
+            maxLen = std::max(maxLen, right - left + 1);
         }
 
-        int res = 0;
-        int l = 0;
-        std::unordered_multiset<char> diffs{};
-        diffs.reserve(s.size());
-
-        int r = 0;
-        for (;r<s.size();r++){
-            while (diffs.size()>k){
-                res = std::max(res, r-1-l);
-                diffs.erase(s[l]);
-                l++;
-            }
-            if (s[r] != maxSrt.character){
-                diffs.insert(s[r]);
-            }
-        }
-        res = std::max(res, r-l-(s[r]!=maxSrt.character));
-        return res;
+        return maxLen;
     }
 };
 
@@ -69,9 +50,9 @@ public:
 int main(){
     Solution sol{};
 
-    std::string vals = "AAAB";
+    std::string vals = "XYYX";
 
-    std::cout << "first example " << sol.characterReplacement(vals, 0) << std::endl;
-    std::cout << "-------------------------------------------\n"; // expected 5
+    std::cout << "first example " << sol.characterReplacement(vals, 2) << std::endl;
+    std::cout << "-------------------------------------------\n"; // expected 4
 
 }
