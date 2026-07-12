@@ -14,52 +14,55 @@ using namespace std;
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-        const std::string* shortStr{};
-        const std::string* longStr{};
-        // determine shortest string and fill map with it
-        if (s1.size() < s2.size()){
-            shortStr = &s1;
-            longStr = &s2;
-            windowSize = s1.size();
-            fillMap(s1);
-        } else {
-            shortStr = &s2;
-            longStr = &s1;
-            windowSize = s2.size();
-            fillMap(s2);
+        if (s1.size() > s2.size())
+            return false;
+
+        int winSize = s1.size();
+        std::unordered_map<char, int> charAppeareancesMap{};
+        std::unordered_map<char, int> originalMap{};
+        for (char c:s1){
+            charAppeareancesMap[c]++;
+            originalMap[c]++;
         }
+        int charsToConsume = charAppeareancesMap.size();
 
         int l = 0;
-        std::unordered_map<char, int> currentMap(chars);
-        bool isResetNeeded = false;
-        for (int r=0;r < longStr->size();r++){
-            
-            if (isResetNeeded){
-                isResetNeeded = false;
-                currentMap = chars;
+        for (int r=0;r < s2.size();r++){
+            while ((r-l+1) > winSize){
+                auto it = charAppeareancesMap.find(s2[l]);
+                if (it != charAppeareancesMap.end()) {
+                    it->second++;
+                    if (charAppeareancesMap[s2[l]] == 0){
+                        charsToConsume--;
+                    }
+                }
+                l++;
             }
-            currentMap[longStr->at(r)]--;
+            auto it = charAppeareancesMap.find(s2[r]);
 
-            // char not in map, or in map but count ran out
-            while (r < longStr->size() && (currentMap.find(longStr->at(r)) == currentMap.end() || currentMap[longStr->at(r)] < 0)){
-                isResetNeeded = true;
-                r++;
+            // not found in map
+            if (it == charAppeareancesMap.end()){
                 l = r;
+                charAppeareancesMap = originalMap;
+                charsToConsume = charAppeareancesMap.size();
+                continue;
             }
-            if (windowSize == (r-l+1)){
+
+            charAppeareancesMap[s2[r]]--;
+
+            if (charAppeareancesMap[s2[r]] < 0){
+                charsToConsume++;
+                continue;
+            }
+
+            if (charAppeareancesMap[s2[r]] == 0){
+                charsToConsume--;
+            }
+            if (charsToConsume == 0){
                 return true;
             }
         }
         return false;
-    }
-private:
-    int windowSize = 0;
-    std::unordered_map<char, int> chars{};
-
-    void fillMap(const std::string& s){
-        for (char c:s){
-            chars[c]++;
-        }
     }
 };
 
@@ -74,6 +77,13 @@ int main(){
     std::string s1 = "abc";
     std::string s2 = "lecabee";
 
+    std::cout << "has permutation --> " << (sol.checkInclusion(s1, s2)?"true":"false") << std::endl;
+    std::cout << "-------------------------------------------\n"; // true
+    s2 = "lecaabee";
+    std::cout << "has permutation --> " << (sol.checkInclusion(s1, s2)?"true":"false") << std::endl;
+    std::cout << "-------------------------------------------\n"; // false
+    s1="adc";
+    s2="dcda";
     std::cout << "has permutation --> " << (sol.checkInclusion(s1, s2)?"true":"false") << std::endl;
     std::cout << "-------------------------------------------\n"; // true
 
