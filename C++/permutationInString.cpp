@@ -17,51 +17,31 @@ public:
         if (s1.size() > s2.size())
             return false;
 
-        int winSize = s1.size();
-        std::unordered_map<char, int> charAppeareancesMap{};
-        std::unordered_map<char, int> originalMap{};
-        for (char c:s1){
-            charAppeareancesMap[c]++;
-            originalMap[c]++;
-        }
-        int charsToConsume = charAppeareancesMap.size();
+        int freq[26] = {};
 
+        // Count the characters we need.
+        for (char c : s1)
+            freq[c - 'a']++;
+
+        int remaining = s1.size();
         int l = 0;
-        for (int r=0;r < s2.size();r++){
-            while ((r-l+1) > winSize){
-                auto it = charAppeareancesMap.find(s2[l]);
-                if (it != charAppeareancesMap.end()) {
-                    it->second++;
-                    if (charAppeareancesMap[s2[l]] == 0){
-                        charsToConsume--;
-                    }
-                }
+
+        for (int r = 0; r < s2.size(); r++) {
+            // Character enters the window.
+            if (--freq[s2[r] - 'a'] >= 0)
+                remaining--;
+
+            // Keep the window the same size as s1.
+            if (r - l + 1 > s1.size()) {
+                if (++freq[s2[l] - 'a'] > 0)
+                    remaining++;
                 l++;
             }
-            auto it = charAppeareancesMap.find(s2[r]);
 
-            // not found in map
-            if (it == charAppeareancesMap.end()){
-                l = r;
-                charAppeareancesMap = originalMap;
-                charsToConsume = charAppeareancesMap.size();
-                continue;
-            }
-
-            charAppeareancesMap[s2[r]]--;
-
-            if (charAppeareancesMap[s2[r]] < 0){
-                charsToConsume++;
-                continue;
-            }
-
-            if (charAppeareancesMap[s2[r]] == 0){
-                charsToConsume--;
-            }
-            if (charsToConsume == 0){
+            if (remaining == 0)
                 return true;
-            }
         }
+
         return false;
     }
 };
