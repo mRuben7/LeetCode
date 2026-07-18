@@ -14,8 +14,39 @@ using namespace std;
 class Solution {
 public:
     string minWindow(string s, string t) {
-        
-        return {};
+        std::string res{};
+        if (s.size() < t.size()){
+            return res;
+        }
+
+        std::unordered_map<char, int> charMap{};
+        for (char c:t){
+            charMap[c]++;
+        }
+        int count = charMap.size();
+
+        int l = 0;
+        for (int r=0;r < s.size();r++){
+            if (charMap.find(s[r]) != charMap.end()){
+                charMap[s[r]]--;
+                if (charMap[s[r]] == 0){
+                    count--;
+                }
+            }
+            while (count == 0){
+                if(res.empty() || res.size() > (r-l+1)){
+                    res = s.substr(l, r-l+1);
+                }
+                if (charMap.find(s[l]) != charMap.end()){
+                    charMap[s[l]]++;
+                    if (charMap[s[l]] > 0){
+                        count++;
+                    }
+                }
+                l++;
+            }
+        }
+        return res;
     }
 };
 
