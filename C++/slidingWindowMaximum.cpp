@@ -14,7 +14,27 @@ using namespace std;
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-        return {};
+        std::multiset<int> ms{};
+        // fill set with first nums
+        for (int i=0;i<k;i++){
+            ms.insert(nums[i]);
+        }
+        std::vector<int> res{};
+        res.emplace_back(*--ms.end());
+
+        int l = 0;
+        for (int r = k;r<nums.size();r++){
+            ms.insert(nums[r]);
+            
+            auto it = ms.find(nums[l]);
+            if (it != ms.end()){
+                ms.erase(it);
+            }
+            l++;
+
+            res.emplace_back(*--ms.end());
+        }
+        return res;
     }
 };
 
