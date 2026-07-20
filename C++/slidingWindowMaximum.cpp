@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
+#include <deque>
 #include <optional>
 #include <cmath>
 
@@ -14,25 +15,24 @@ using namespace std;
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
-        std::multiset<int> ms{};
-        // fill set with first nums
-        for (int i=0;i<k;i++){
-            ms.insert(nums[i]);
-        }
         std::vector<int> res{};
-        res.emplace_back(*--ms.end());
-
-        int l = 0;
-        for (int r = k;r<nums.size();r++){
-            ms.insert(nums[r]);
-            
-            auto it = ms.find(nums[l]);
-            if (it != ms.end()){
-                ms.erase(it);
+        res.reserve(nums.size());
+        std::deque<int> dq{};
+        int l = 0 - k + 1;
+        for (int r = 0; r < nums.size(); r++){
+            while (!dq.empty() && nums[r] >= nums[dq.back()])
+            {
+                dq.pop_back();
             }
-            l++;
+            dq.push_back(r);
 
-            res.emplace_back(*--ms.end());
+            while (!dq.empty() && dq.front() < l)
+            {
+                dq.pop_front();
+            }
+            if (l >= 0)
+                res.push_back(nums[dq.front()]);
+            l++;
         }
         return res;
     }
