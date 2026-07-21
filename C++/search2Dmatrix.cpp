@@ -20,8 +20,20 @@ public:
         int m = (l + r) / 2;
         while (l<=r){
             if (matrix[m][0] <= target && matrix[m][matrix[m].size()-1] >= target){
-                // inner bin search here
-                return true;
+                int i = 0;
+                int j = matrix[m].size()-1;
+                int mid = ((i + j) / 2);
+                while (i<=j){
+                    if (matrix[m][mid] == target){
+                        return true;
+                    }
+                    if (target < matrix[m][mid]){
+                        j = mid - 1;
+                    } else {
+                        i = mid + 1;
+                    }
+                    mid = ((i + j) / 2);
+                }
             }
             if (target < matrix[m][0]){
                 r = m - 1;
@@ -45,7 +57,7 @@ int main(){
 
     std::vector<vector<int>> vec {{1,2,4,8},{10,11,12,13},{14,20,30,40}};
 
-    std::cout << sol.searchMatrix(vec, 34) << std::endl;
+    std::cout << (sol.searchMatrix(vec, -30)?"true":"false") << std::endl;
     std::cout << "-------------------------------------------\n"; // true
     
 
