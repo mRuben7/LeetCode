@@ -21,19 +21,31 @@ public:
             RBOUND = std::max(RBOUND, pile);
         }
         int m = RBOUND/2;
+        int l = 0;
+        int r = RBOUND;
+        int res = r;
 
-        while (true){
+        while (l<r){
             int hNeeded = 0;
             for (int pile:piles){
                 hNeeded += ((pile + m-1)/m);
             }
             if (hNeeded > h){ // means its not valid, so increase speed
+                l = m;
                 m = m + (m/2);
+                if (m>r){
+                    m = r;
+                }
             } else { // means its valid, so decrease speed
+                r = m;
+                res = std::min(res, r);
                 m = m - (m/2);
+                if (m<l){
+                    m = l;
+                }
             }
         }
-        return 0;
+        return res;
     }
 };
 
