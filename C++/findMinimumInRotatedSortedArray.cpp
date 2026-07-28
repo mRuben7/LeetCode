@@ -19,16 +19,13 @@ public:
         int r = nums.size() - 1;
         while (l<r){
             int m = l + ((r - l) / 2);
-            if (m != 0 && nums[m] < nums[m - 1]){
-                return nums[m];
-            } 
             if (nums[m] > nums[r]) {
                 l = m + 1;
             } else {
-                r = m - 1;
+                r = m;
             }
         }
-        return nums[0];
+        return nums[l];
     }
 };
 
