@@ -22,7 +22,13 @@ public:
     }
     
     string get(string key, int timestamp) {
-        return "a";
+        if (mp.find(key) == mp.end()){
+            // key not found
+            return "";
+        }
+        const auto& kv = mp.at(key);
+        
+        return "res";
     }
 
 private:
