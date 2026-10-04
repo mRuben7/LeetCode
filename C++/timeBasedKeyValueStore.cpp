@@ -29,17 +29,19 @@ public:
         const auto& vec = mp.at(key);
         int l = 0;
         int r = vec.size() -1;
-        int res = 0;
-        while (l<r){
+        int res = -1;
+        while (l<=r){
             int mid = ((r - l) / 2) + l;
             if (vec[mid].first <= timestamp){
+                res = mid;
                 l = mid+1;
-                res = l;
             } else {
                 r = mid -1;
             }
         }
-        
+        if (res < 0){
+            return "";
+        }
         return vec[res].second;
     }
 
