@@ -26,37 +26,20 @@ struct ListNode {
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        ListNode* curr = head;
-        int size = 0;
-        while (curr){
-            std::cout << "size: " << size << ", val: " << curr->val << std::endl;
-            curr = curr->next;
-            size++;
+        ListNode* dummy = new ListNode(-1, head);
+        ListNode* l = dummy;
+        ListNode* r = head;
+        for (int i = 0; i<n; i++){
+            r = r->next;
         }
-        int nodeToDelete = size - n;
-        std::cout << "size: " << size << std::endl;
-        std::cout << "node to delete: " << nodeToDelete << std::endl;
-        int i = 0;
-        ListNode* prev = nullptr;
-        curr = head;
-        while (curr){
-            if (i == nodeToDelete){
-                if (!prev){
-                    if (size < 2){
-                        head = nullptr;
-                    } else {
-                        head = curr->next;
-                    }
-                } else {
-                    prev->next = curr->next;
-                }
-                break;
-            }
-            prev = curr;
-            curr = curr->next;
-            i++;
+        while (r){
+            l = l->next;
+            r = r->next;
         }
-        return head;
+        if (l->next){
+            l->next = l->next->next;
+        }
+        return dummy->next;
     }
 };
 
