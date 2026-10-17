@@ -13,13 +13,23 @@ using namespace std;
 
 
 //Definition for singly-linked list.
-struct Node {
+class Node {
+public:
     int val;
-    Node *next;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = nullptr;
+        random = nullptr;
+    }
 
-    Node() : val(0), next(nullptr) {}
-    Node(int x) : val(x), next(nullptr) {}
-    Node(int x, Node *next) : val(x), next(next) {}
+    Node(int _val, Node* _next) {
+        val = _val;
+        next = _next;
+        random = nullptr;
+    }
 };
 
 
@@ -28,8 +38,12 @@ public:
     Node* copyRandomList(Node* head) {
         Node* curr = head;
 
-        Node* prev = new Node();
+        Node* prev = new Node(-1);
         Node* dummy = new Node(-1);
+
+        int i = 0;
+        std::unordered_map<Node*, int> randomPtrAndIndex{};
+        std::unordered_map<int, int> holderIndexAndRandomIndex{};
 
         while (curr){
             Node* node = new Node(curr->val);
@@ -37,9 +51,42 @@ public:
             if (!dummy->next)
                 dummy->next = node;
             prev = node;
+            randomPtrAndIndex[curr->random];
+            holderIndexAndRandomIndex[i];
+            if (randomPtrAndIndex.find(curr) != randomPtrAndIndex.end()){
+                randomPtrAndIndex[curr] = i;    
+            }
             curr = curr->next;
+            i++;
+        }
+        
+        std::unordered_map<int, Node*> newRandomIndexAndPtr{};
+        
+        for (auto& kv : randomPtrAndIndex){
+            newRandomIndexAndPtr[kv.second];
+        }
+        
+        i = 0;
+        Node* newCurr = dummy->next;
+        
+        while (newCurr){
+            if (newRandomIndexAndPtr.find(i) != newRandomIndexAndPtr.end()){
+                newRandomIndexAndPtr[i] = newCurr;
+            }
+            newCurr = newCurr->next;
+            i++;
         }
 
+        curr = head;
+        i = 0;
+        Node* newCurr = dummy->next;
+
+        while (newCurr){
+            
+            newCurr = newCurr->next;
+            i++;
+        }
+        
         return dummy->next;
     }
 };
