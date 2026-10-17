@@ -42,19 +42,18 @@ public:
         Node* dummy = new Node(-1);
 
         int i = 0;
+        /// holder index, random ptr and random index
         std::unordered_map<Node*, int> randomPtrAndIndex{};
-        std::unordered_map<int, int> holderIndexAndRandomIndex{};
-
+        
         while (curr){
             Node* node = new Node(curr->val);
             prev->next = node;
             if (!dummy->next)
-                dummy->next = node;
+            dummy->next = node;
             prev = node;
             randomPtrAndIndex[curr->random];
-            holderIndexAndRandomIndex[i];
             if (randomPtrAndIndex.find(curr) != randomPtrAndIndex.end()){
-                randomPtrAndIndex[curr] = i;    
+                randomPtrAndIndex[curr] = i;
             }
             curr = curr->next;
             i++;
@@ -66,23 +65,34 @@ public:
             newRandomIndexAndPtr[kv.second];
         }
         
+        std::unordered_map<int, int> holderAndRandomIndices{};
+        i = 0;
+        curr = head;
+        while (curr){
+            if (randomPtrAndIndex.find(curr->random) != randomPtrAndIndex.end()){
+                holderAndRandomIndices[i] = randomPtrAndIndex[curr->random];
+            }
+            curr = curr->next;
+        }
+
         i = 0;
         Node* newCurr = dummy->next;
-        
+        curr = head;
         while (newCurr){
             if (newRandomIndexAndPtr.find(i) != newRandomIndexAndPtr.end()){
                 newRandomIndexAndPtr[i] = newCurr;
             }
+            curr = curr->next;
             newCurr = newCurr->next;
             i++;
         }
 
         curr = head;
         i = 0;
-        Node* newCurr = dummy->next;
+        newCurr = dummy->next;
 
         while (newCurr){
-            
+            newCurr->random = newRandomIndexAndPtr[holderAndRandomIndices[i]];
             newCurr = newCurr->next;
             i++;
         }
