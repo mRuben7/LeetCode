@@ -26,7 +26,39 @@ struct ListNode {
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        return l1;
+        ListNode* dummy = new ListNode(-1);
+        ListNode* prev = dummy;
+
+        int rem = 0;
+
+        while ((l1 or l2) or rem > 0){
+            int val1 = 0;
+            int val2 = 0;
+
+            if (l1){
+                val1 = l1->val;
+                l1 = l1->next;
+            }
+            if (l2){
+                val2 = l2->val;
+                l2 = l2->next;
+            }
+
+            int sum = val1 + val2 + rem;
+            int mod = sum;
+            if (sum > 9){
+                int res = sum / 10;
+                mod = sum % 10;
+                rem = res;
+            } else {
+                rem = 0;
+            }
+            ListNode* node = new ListNode(mod);
+            prev->next = node;
+            prev = node;
+        }
+        
+        return dummy->next;
     }
 };
 
@@ -45,6 +77,9 @@ int main(){
     ListNode* listNode2_2 = new ListNode(6, nullptr);
     ListNode* listNode1_2 = new ListNode(5, listNode2_2);
     ListNode* head_2 = new ListNode(4, listNode1_2);
+    
+    // ListNode* head = new ListNode(9, nullptr);
+    // ListNode* head_2 = new ListNode(9, nullptr);
 
 
     Solution sol{};
