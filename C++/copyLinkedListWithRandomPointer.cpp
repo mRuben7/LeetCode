@@ -41,62 +41,40 @@ public:
         Node* prev = new Node(-1);
         Node* dummy = new Node(-1);
 
-        int i = 0;
-        /// holder index, random ptr and random index
-        std::unordered_map<Node*, int> randomPtrAndIndex{};
+        std::unordered_map<Node*, Node*> oldNodeToNewNodePtrs;
         
         while (curr){
             Node* node = new Node(curr->val);
-            prev->next = node;
+            
             if (!dummy->next)
-            dummy->next = node;
+                dummy->next = node;
+
+            prev->next = node;
             prev = node;
-            randomPtrAndIndex[curr->random];
-            if (randomPtrAndIndex.find(curr) != randomPtrAndIndex.end()){
-                randomPtrAndIndex[curr] = i;
-            }
+
+            oldNodeToNewNodePtrs[curr] = node;
+            
             curr = curr->next;
-            i++;
         }
-        
-        std::unordered_map<int, Node*> newRandomIndexAndPtr{};
-        
-        for (auto& kv : randomPtrAndIndex){
-            newRandomIndexAndPtr[kv.second];
-        }
-        
-        std::unordered_map<int, int> holderAndRandomIndices{};
-        i = 0;
+
         curr = head;
+        prev = new Node(-1);
+        Node* node = dummy->next;
+
         while (curr){
-            if (randomPtrAndIndex.find(curr->random) != randomPtrAndIndex.end()){
-                holderAndRandomIndices[i] = randomPtrAndIndex[curr->random];
+            if (!curr->random){
+                curr = curr->next;
+                node = node->next;
+                continue;
             }
+
+            // auto rndm = oldNodeToNewNodePtrs[curr->random];
+            node->random = oldNodeToNewNodePtrs[curr->random];
+
             curr = curr->next;
+            node = node->next;
         }
 
-        i = 0;
-        Node* newCurr = dummy->next;
-        curr = head;
-        while (newCurr){
-            if (newRandomIndexAndPtr.find(i) != newRandomIndexAndPtr.end()){
-                newRandomIndexAndPtr[i] = newCurr;
-            }
-            curr = curr->next;
-            newCurr = newCurr->next;
-            i++;
-        }
-
-        curr = head;
-        i = 0;
-        newCurr = dummy->next;
-
-        while (newCurr){
-            newCurr->random = newRandomIndexAndPtr[holderAndRandomIndices[i]];
-            newCurr = newCurr->next;
-            i++;
-        }
-        
         return dummy->next;
     }
 };
