@@ -114,6 +114,11 @@ int main(){
     Node* listNode1 = new Node(2, listNode2);
     Node* head = new Node(1, listNode1);
 
+    head->random = nullptr;
+    listNode1->random = listNode2;
+    listNode2->random = listNode2;
+    listNode3->random = listNode1;
+
     // ListNode* head = new ListNode(1, nullptr);
 
 
