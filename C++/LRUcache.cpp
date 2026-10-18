@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <optional>
 #include <cmath>
+#include <queue>
 
 using namespace std;
 
@@ -21,15 +22,27 @@ public:
         if (mp.find(key) == mp.end()){
             return -1;
         }
+        if (!q.empty() and key == q.front()){
+            q.pop();
+        }
+        q.push(key);
         return mp.at(key);
     }
     
     void put(int key, int value) {
-        if (m_capacity <= m_size){
-            // TODO LRU logic
+        if (m_size >= m_capacity){
+            mp.erase(q.front());
+            q.pop();
+            m_size--;
+        } else {
+            if (!q.empty() and key == q.front()){
+                q.pop();
+            }
         }
+        q.push(key);
 
         mp[key] = value;
+        m_size++;
     }
 
 private:
@@ -38,6 +51,7 @@ private:
 
     // key - value
     std::unordered_map<int, int> mp{};
+    std::queue<int> q{};
 };
 
 
@@ -45,9 +59,6 @@ private:
 // use clang++ -std=c++20 template.cpp -o template to compile
 
 int main(){
-    //example input
-    std::vector<int> nums{1,2,3,4,4};
-
     LRUCache lRUCache(2);
     lRUCache.put(1, 10);  // cache: {1=10}
     std::cout << "get: " << lRUCache.get(1) << std::endl;      // return 10
