@@ -12,46 +12,79 @@
 
 using namespace std;
 
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* prev;
+    
+    Node(int _val) {
+        val = _val;
+        next = nullptr;
+        prev = nullptr;
+    }
+    Node(int _val, Node* _next) {
+        val = _val;
+        next = _next;
+        prev = nullptr;
+    }
+    Node(int _val, Node* _prev, Node* _next) {
+        val = _val;
+        next = _next;
+        prev = _prev;
+    }
+};
+
 class LRUCache {
 public:
     LRUCache(int capacity) {
         m_capacity = capacity;
+        head->next = tail;
+        tail->prev = head;
     }
     
     int get(int key) {
-        if (mp.find(key) == mp.end()){
-            return -1;
-        }
-        if (!q.empty() and key == q.front()){
-            q.pop();
-        }
-        q.push(key);
-        return mp.at(key);
+
+        return 0;
     }
     
     void put(int key, int value) {
-        if (m_size >= m_capacity){
-            mp.erase(q.front());
-            q.pop();
-            m_size--;
-        } else {
-            if (!q.empty() and key == q.front()){
-                q.pop();
-            }
+        Node* nod{};
+        if (mp.find(key) != mp.end()){
+            nod = mp.at(key);
+            nod->prev->next = nod->next;
+            nod->prev = tail;
+            tail->next = nod;
+            tail = nod;
+            return;
         }
-        q.push(key);
 
-        mp[key] = value;
+
+        nod = new Node(value);
         m_size++;
+
+        if (m_size > m_capacity){
+            // TODO delete on maps and move head to next one
+            m_size--;
+        }
+
+        tail->next = nod;
+        nod->prev = tail;
+        tail = nod;
+
+        mp[key] = nod;
     }
 
 private:
     int m_capacity{};
     int m_size{};
 
-    // key - value
-    std::unordered_map<int, int> mp{};
-    std::queue<int> q{};
+    Node* head = new Node(-1);
+    Node* tail = new Node(-1);
+
+    // key - Node
+    std::unordered_map<int, Node*> mp{};
+    // TODO add Node to key map
 };
 
 
