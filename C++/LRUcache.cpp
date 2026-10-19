@@ -14,10 +14,17 @@ using namespace std;
 
 class Node {
 public:
+    int key;
     int val;
     Node* next;
     Node* prev;
     
+    Node(int _key, int _val) {
+        key = _key;
+        val = _val;
+        next = nullptr;
+        prev = nullptr;
+    }
     Node(int _val) {
         val = _val;
         next = nullptr;
@@ -60,11 +67,12 @@ public:
         }
 
 
-        nod = new Node(value);
+        nod = new Node(key, value);
         m_size++;
 
         if (m_size > m_capacity){
-            // TODO delete on maps and move head to next one
+            mp.erase(head->key);
+            head = head->next;
             m_size--;
         }
 
@@ -79,12 +87,11 @@ private:
     int m_capacity{};
     int m_size{};
 
-    Node* head = new Node(-1);
     Node* tail = new Node(-1);
+    Node* head = tail;
 
     // key - Node
     std::unordered_map<int, Node*> mp{};
-    // TODO add Node to key map
 };
 
 
