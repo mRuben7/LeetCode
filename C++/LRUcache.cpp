@@ -51,8 +51,16 @@ public:
     }
     
     int get(int key) {
-
-        return 0;
+        if (mp.find(key) == mp.end()){
+            return -1;
+        }
+        Node* nod{};
+        nod = mp.at(key);
+        nod->prev->next = nod->next;
+        nod->prev = tail;
+        tail->next = nod;
+        tail = nod;
+        return nod->val;
     }
     
     void put(int key, int value) {
@@ -69,6 +77,9 @@ public:
 
         nod = new Node(key, value);
         m_size++;
+        if(head->val == -1){
+            head = nod;
+        }
 
         if (m_size > m_capacity){
             mp.erase(head->key);
