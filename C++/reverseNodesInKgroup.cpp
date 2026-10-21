@@ -34,24 +34,32 @@ public:
             curr = curr->next;
         }
         int reversions = s / k;
+        int mod = s % k;
+
+        // revert
         ListNode* dummy = nullptr;
         curr = head;
 
-        ListNode* oldHead = nullptr;
+        ListNode* prevTail = nullptr;
         ListNode* prev = nullptr;
+        ListNode* tl = nullptr;
 
         for (int iRev = 0; iRev < reversions; iRev++){
-            oldHead = curr;
             for (int i = 0; i < k; i++){
                 auto nxt = curr->next;
                 curr->next = prev;
+                if (i==0)
+                    tl = curr;
                 prev = curr;
                 curr = nxt;
             }
-            oldHead->next = curr;
+            if(prevTail)
+                prevTail->next = prev;
+            prevTail = tl;
             if (!dummy)
                 dummy = prev;
         }
+        tl->next = mod ? curr : nullptr;
         return dummy;
     }
 };
