@@ -18,92 +18,76 @@ public:
     int val;
     Node* next;
     Node* prev;
-    
-    Node(int _key, int _val) {
-        key = _key;
-        val = _val;
-        next = nullptr;
-        prev = nullptr;
-    }
-    Node(int _val) {
-        val = _val;
-        next = nullptr;
-        prev = nullptr;
-    }
-    Node(int _val, Node* _next) {
-        val = _val;
-        next = _next;
-        prev = nullptr;
-    }
-    Node(int _val, Node* _prev, Node* _next) {
-        val = _val;
-        next = _next;
-        prev = _prev;
-    }
+
+    Node(int key, int val)
+        : key(key), val(val), next(nullptr), prev(nullptr) {}
 };
 
 class LRUCache {
+private:
+    int m_capacity;
+    unordered_map<int, Node*> mp;
+    Node* head;
+    Node* tail;
+
+    void remove(Node* node) {
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+    }
+
+    void insertAtEnd(Node* node) {
+        node->prev = tail->prev;
+        node->next = tail;
+        tail->prev->next = node;
+        tail->prev = node;
+    }
+
+    void moveToEnd(Node* node) {
+        remove(node);
+        insertAtEnd(node);
+    }
+
 public:
-    LRUCache(int capacity) {
-        m_capacity = capacity;
+    LRUCache(int capacity) : m_capacity(capacity) {
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
         head->next = tail;
         tail->prev = head;
     }
-    
+
     int get(int key) {
-        if (mp.find(key) == mp.end()){
+        auto it = mp.find(key);
+        if (it == mp.end())
             return -1;
-        }
-        Node* nod{};
-        nod = mp.at(key);
-        nod->prev->next = nod->next;
-        nod->prev = tail;
-        tail->next = nod;
-        tail = nod;
-        return nod->val;
+
+        Node* node = it->second;
+        moveToEnd(node);
+        return node->val;
     }
-    
+
     void put(int key, int value) {
-        Node* nod{};
-        if (mp.find(key) != mp.end()){
-            nod = mp.at(key);
-            nod->prev->next = nod->next;
-            nod->prev = tail;
-            tail->next = nod;
-            tail = nod;
+        auto it = mp.find(key);
+
+        if (it != mp.end()) {
+            Node* node = it->second;
+            node->val = value;
+            moveToEnd(node);
             return;
         }
 
+        Node* node = new Node(key, value);
+        mp[key] = node;
+        insertAtEnd(node);
 
-        nod = new Node(key, value);
-        m_size++;
-        if(head->val == -1){
-            head = nod;
+        if (mp.size() > m_capacity) {
+            Node* lru = head->next;
+            remove(lru);
+            mp.erase(lru->key);
+            delete lru;
         }
-
-        if (m_size > m_capacity){
-            mp.erase(head->key);
-            head = head->next;
-            m_size--;
-        }
-
-        tail->next = nod;
-        nod->prev = tail;
-        tail = nod;
-
-        mp[key] = nod;
     }
-
-private:
-    int m_capacity{};
-    int m_size{};
-
-    Node* tail = new Node(-1);
-    Node* head = tail;
-
-    // key - Node
-    std::unordered_map<int, Node*> mp{};
 };
+
 
 
 // === Debug part ==============================================
