@@ -44,11 +44,12 @@ public:
             }
             if (min == 21000)
                 break;
-            ListNode* node = new ListNode(min);
-            prev->next = node;
-            prev = node;
 
             auto& nod = lists[ind];
+
+            prev->next = nod;
+            prev = nod;
+
             nod = nod ? nod->next : nullptr;
         }
         return dummy->next;
