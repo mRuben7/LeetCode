@@ -26,7 +26,33 @@ struct ListNode {
 class Solution {
 public:
     ListNode* reverseKGroup(ListNode* head, int k) {
-        return nullptr;
+        // get size
+        int s = 0;
+        auto curr = head;
+        while (curr){
+            s++;
+            curr = curr->next;
+        }
+        int reversions = s / k;
+        ListNode* dummy = nullptr;
+        curr = head;
+
+        ListNode* oldHead = nullptr;
+        ListNode* prev = nullptr;
+
+        for (int iRev = 0; iRev < reversions; iRev++){
+            oldHead = curr;
+            for (int i = 0; i < k; i++){
+                auto nxt = curr->next;
+                curr->next = prev;
+                prev = curr;
+                curr = nxt;
+            }
+            oldHead->next = curr;
+            if (!dummy)
+                dummy = prev;
+        }
+        return dummy;
     }
 };
 
@@ -37,13 +63,25 @@ public:
 int main(){
     //example input
     std::vector<ListNode*> vec{};
+    const int size = 6;
 
-    ListNode* listNode2 = new ListNode(4, nullptr);
-    ListNode* listNode1 = new ListNode(2, listNode2);
-    ListNode* head = new ListNode(1, listNode1);
+    ListNode* dummy = new ListNode(-1);
+    auto prev = dummy;
+
+    for(int i = 1; i <= size; i++){
+        auto nod = new ListNode(i);
+        prev->next = nod;
+        prev = nod;
+    }
 
     Solution sol{};
-    sol.reverseKGroup(head, 3);
+    auto res = sol.reverseKGroup(dummy->next, 3);
+
+    while(res){
+        std::cout << res->val << ", ";
+        res = res->next;
+    }
+    std::cout << std::endl;
 
     //output
     
