@@ -26,22 +26,11 @@ struct TreeNode {
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        if (!root){
-            return depth--;
-        }
-        if (root == og){
-            return max;
-        }
-        depth++;
-        max = std::max(depth, max);
-        maxDepth(root->left);
-        maxDepth(root->right);
-        return max;
+        if (!root)
+            return 0;
+
+        return 1 + std::max(maxDepth(root->left), maxDepth(root->right));
     }
-private:
-    int depth = 1;
-    int max = 0;
-    TreeNode* og{};
 };
 
 
