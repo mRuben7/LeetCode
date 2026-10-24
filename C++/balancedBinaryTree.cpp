@@ -37,7 +37,7 @@ private:
         auto diff = std::abs(left - right);
         if (diff >= 2)
             m_isBalanded = false;
-        return 1 + left + right;
+        return 1 + std::max(left, right);
     }
     bool m_isBalanded = true;
 };
@@ -57,7 +57,7 @@ int main(){
     root->left = c2;
     root->right = c3;
     c3->left = c4;
-    c4->left = c5;
+    // c4->left = c5;
 
     Solution sol{};
 
