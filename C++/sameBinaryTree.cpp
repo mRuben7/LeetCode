@@ -37,7 +37,7 @@ public:
         if (q->val != p->val){
             return false;
         }
-        return isSameTree(p->left, p->right) and isSameTree(q->left, q->right);
+        return isSameTree(p->left, q->left) and isSameTree(p->right, q->right);
     }
 };
 
