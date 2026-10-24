@@ -26,7 +26,6 @@ struct TreeNode {
 class Solution {
 public:
     int diameterOfBinaryTree(TreeNode* root) {
-        int max = 0;
         auto a = DFS(root);
 
         return max;
@@ -36,9 +35,12 @@ private:
     int DFS(TreeNode* node){
         if (!node)
             return 0;
-        
-        return std::max(DFS(node->left), DFS(node->right));
+        auto left = DFS(node->left);
+        auto right = DFS(node->right);
+        max = std::max(max, (left + right));
+        return 1 + std::max(left, right);
     }
+    int max = 0;
 };
 
 
