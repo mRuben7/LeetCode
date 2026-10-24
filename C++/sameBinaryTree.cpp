@@ -28,10 +28,7 @@ public:
         if (!q and !p){
             return true;
         }
-        if (!q){
-            return false;
-        }
-        if (!p){
+        if (!q or !p){
             return false;
         }
         if (q->val != p->val){
