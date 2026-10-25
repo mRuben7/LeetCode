@@ -24,33 +24,30 @@ struct TreeNode {
 
 class Solution {
 public:
+    bool isSameTree(TreeNode* a, TreeNode* b) {
+        if (!a && !b)
+            return true;
+
+        if (!a || !b)
+            return false;
+
+        if (a->val != b->val)
+            return false;
+
+        return isSameTree(a->left, b->left) &&
+               isSameTree(a->right, b->right);
+    }
+
     bool isSubtree(TreeNode* root, TreeNode* subRoot) {
-        if (res)
-            return res;
-        if (!root and !subRoot)
-            return true;
-        if (!root or !subRoot)
+        if (!root)
             return false;
 
-        if (root->val == subRoot->val){
-            res = isSameTree(root, subRoot);
-        }
-        bool left = isSubtree(root->left, subRoot);
-        bool right = isSubtree(root->right, subRoot);
-        return left or right;
-    }
-    bool isSameTree (TreeNode* n1, TreeNode* n2){
-        if (!n1 and !n2)
+        if (isSameTree(root, subRoot))
             return true;
-        if (!n1 or !n2)
-            return false;
-        if (n1->val != n2->val)
-            return false;
 
-        return isSameTree(n1->left, n2->left) and isSameTree(n1->right, n2->right);
+        return isSubtree(root->left, subRoot) ||
+               isSubtree(root->right, subRoot);
     }
-    bool res = false;
-};
 
 
 // === Debug part ==============================================
