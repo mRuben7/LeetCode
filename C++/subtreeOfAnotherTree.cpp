@@ -48,6 +48,7 @@ public:
         return isSubtree(root->left, subRoot) ||
                isSubtree(root->right, subRoot);
     }
+};
 
 
 // === Debug part ==============================================
