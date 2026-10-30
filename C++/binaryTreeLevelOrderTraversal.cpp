@@ -29,32 +29,22 @@ public:
             return {};
 
         std::vector<std::vector<int>> res;
-        std::vector<TreeNode*> s1{};
-        std::vector<TreeNode*> s2{};
-        s1.push_back(root);
+        std::deque<TreeNode*> q{};
+        q.push_back(root);
 
-        while(!s1.empty() or !s2.empty()){
+        while (!q.empty()){
+            int size = q.size();
             std::vector<int> tmp{};
-            if (s1.empty()){
-                for (auto n : s2){
-                    if(!n)
-                        continue;
-                    tmp.push_back(n->val);
-                    s1.push_back(n->left);
-                    s1.push_back(n->right);
-                }
-                s2.clear();
-            } else {
-                for (auto n : s1){
-                    if(!n)
-                        continue;
-                    tmp.push_back(n->val);
-                    s2.push_back(n->left);
-                    s2.push_back(n->right);
-                }
-                s1.clear();
+            for (int i = 0; i<size; i++){
+                auto n = q.front();
+                q.pop_front();
+                if (!n)
+                    continue;
+                tmp.push_back(n->val);
+                q.push_back(n->left);
+                q.push_back(n->right);
             }
-            if (!tmp.empty())
+            if(!tmp.empty())
                 res.push_back(tmp);
         }
         return res;
