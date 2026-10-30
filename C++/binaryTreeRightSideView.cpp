@@ -25,7 +25,27 @@ struct TreeNode {
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
-        return {2,3,4,5};
+        std::deque<TreeNode*> q{};
+        q.push_back(root);
+        std::vector<int> res{};
+
+        while (!q.empty()){
+            int size = q.size();
+            int tmp = 101;
+            for (int i = 0; i<size; i++){
+                TreeNode* n = q.front();
+                q.pop_front();
+                if (!n)
+                    continue;
+                q.push_back(n->left);
+                q.push_back(n->right);
+                tmp = n->val;
+            }
+            if(tmp != 101)
+                res.push_back(tmp);
+        }
+
+        return res;
     }
 };
 
