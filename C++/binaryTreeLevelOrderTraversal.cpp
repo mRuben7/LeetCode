@@ -25,7 +25,39 @@ struct TreeNode {
 class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
-        return {};
+        if (!root)
+            return {};
+
+        std::vector<std::vector<int>> res;
+        std::vector<TreeNode*> s1{};
+        std::vector<TreeNode*> s2{};
+        s1.push_back(root);
+
+        while(!s1.empty() or !s2.empty()){
+            std::vector<int> tmp{};
+            if (s1.empty()){
+                for (auto n : s2){
+                    if(!n)
+                        continue;
+                    tmp.push_back(n->val);
+                    s1.push_back(n->left);
+                    s1.push_back(n->right);
+                }
+                s2.clear();
+            } else {
+                for (auto n : s1){
+                    if(!n)
+                        continue;
+                    tmp.push_back(n->val);
+                    s2.push_back(n->left);
+                    s2.push_back(n->right);
+                }
+                s1.clear();
+            }
+            if (!tmp.empty())
+                res.push_back(tmp);
+        }
+        return res;
     }
 };
 
@@ -42,6 +74,8 @@ int main(){
     TreeNode* n5 = new TreeNode(5);
     TreeNode* n6 = new TreeNode(6);
     TreeNode* n7 = new TreeNode(7);
+    TreeNode* n8 = new TreeNode(8);
+    TreeNode* n = nullptr;
 
 
     n1->left = n2;
@@ -55,7 +89,14 @@ int main(){
     Solution sol{};
     auto a = sol.levelOrder(n1);
 
-    // std::cout << "solution: " << (sol.levelOrder(root)?"true":"false") << std::endl;
+    int i = 0;
+    for (auto lvl : a){
+        std::cout << "--- level " << i++ << " ---" << std::endl;
+        for (auto nodes : lvl){
+            std::cout << nodes << ", ";
+        }
+        std::cout << std::endl;
+    }
 
     //output
     
