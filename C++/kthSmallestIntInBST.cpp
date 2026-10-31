@@ -25,7 +25,21 @@ struct TreeNode {
 class Solution {
 public:
     int kthSmallest(TreeNode* root, int k) {
-        
+        dfs(root);
+        return vals[k-1];
+    }
+    std::vector<int> vals{};
+    int dfs(TreeNode* node){
+        if (!node)
+            return -1;
+
+        int l = dfs(node->left);
+        vals.push_back(node->val);
+        int r = dfs(node->right);
+        if (r != -1)
+            vals.push_back(r);
+        return node->val;
+
     }
 };
 
