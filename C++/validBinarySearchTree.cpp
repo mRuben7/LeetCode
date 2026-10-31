@@ -28,14 +28,16 @@ public:
         if (!root)
             return true;
 
-        if (root->left and root->left->val >= root->val){
+        return validate(root, -1000000001, 1000000001);
+    }
+    bool validate(TreeNode* node, int l, int r){
+        if (!node)
+            return true;
+
+        if(node->val <= l or node->val >= r)
             return false;
-        }
-        if (root->right and root->right->val <= root->val){
-            return false;
-        }
-        
-        return isValidBST(root->left) and isValidBST(root->right);
+
+        return validate(node->left,l,node->val) and validate(node->right,node->val,r);
     }
 };
 
