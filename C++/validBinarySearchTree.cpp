@@ -27,16 +27,15 @@ public:
     bool isValidBST(TreeNode* root) {
         if (!root)
             return true;
-        bool res = true;
-        
-        if (root->left){
-            res = root->left->val < root->val;
-        }
-        if (res and root->right){
-            res = root->right->val > root->val;
-        }
 
-        return res and isValidBST(root->left) and isValidBST(root->right);
+        if (root->left and root->left->val >= root->val){
+            return false;
+        }
+        if (root->right and root->right->val <= root->val){
+            return false;
+        }
+        
+        return isValidBST(root->left) and isValidBST(root->right);
     }
 };
 
