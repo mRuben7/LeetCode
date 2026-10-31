@@ -36,8 +36,6 @@ public:
         int l = dfs(node->left);
         vals.push_back(node->val);
         int r = dfs(node->right);
-        if (r != -1)
-            vals.push_back(r);
         return node->val;
 
     }
@@ -60,16 +58,16 @@ int main(){
     TreeNode* n = nullptr;
 
 
-    n1->left = n2;
-    n1->right = n3;
-    n2->left = n4;
-    n2->right = n5;
-    n3->left = n6;
-    n3->right = n7;
+    n5->left = n3;
+    n5->right = n6;
+    n3->left = n2;
+    n3->right = n4;
+    n2->left = n1;
+
 
 
     Solution sol{};
-    std::cout << sol.kthSmallest(n1, 3) << std::endl; // expected 
+    std::cout << sol.kthSmallest(n5, 5) << std::endl; // expected 5
 
     //output
     
